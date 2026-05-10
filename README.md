@@ -20,6 +20,10 @@
 
 ---
 
+![](resources/01.png)
+
+![](resources/02.png)
+
 <a id="english"></a>
 
 ## Features
