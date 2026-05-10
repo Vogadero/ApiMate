@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+out/
+*.vsix
+
+# Generated files
+**/*.d.ts
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Webview build artifacts (if using separate build)
+webview-ui/dist/
+webview-ui/build/

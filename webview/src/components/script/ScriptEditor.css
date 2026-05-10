@@ -1,0 +1,61 @@
+.script-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.script-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.script-tab {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+}
+
+.script-tab:hover {
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.script-tab.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
+}
+
+.script-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.script-help {
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--vscode-editor-font-family, 'Consolas', 'Monaco', monospace);
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+.script-textarea {
+  flex: 1;
+  min-height: 120px;
+  resize: vertical;
+  padding: 8px 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  border: none;
+  border-radius: 0;
+  font-family: var(--vscode-editor-font-family, 'Consolas', 'Monaco', monospace);
+}

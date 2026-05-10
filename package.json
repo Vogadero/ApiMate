@@ -1,0 +1,437 @@
+{
+  "name": "apimate",
+  "displayName": "ApiMate - API Testing Tool",
+  "description": "A full-featured API testing extension for VS Code. Supports HTTP, gRPC, WebSocket, SSE, collections, environments, auth, scripts, and automated testing.",
+  "version": "0.0.4",
+  "publisher": "vogadero",
+  "author": {
+    "name": "Vogadero"
+  },
+  "license": "MIT",
+  "icon": "resources/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Testing",
+    "Debuggers",
+    "Other"
+  ],
+  "keywords": [
+    "api",
+    "rest",
+    "http",
+    "grpc",
+    "websocket",
+    "testing",
+    "postman",
+    "api-testing",
+    "insomnia",
+    "hoppscotch",
+    "rest-client",
+    "environment",
+    "collection",
+    "curl"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vogadero/ApiMate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vogadero/ApiMate/issues"
+  },
+  "homepage": "https://github.com/vogadero/ApiMate#readme",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "apimate",
+          "title": "ApiMate",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "apimate": [
+        {
+          "id": "apimate.sidebar",
+          "name": "",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "apimate.newRequest",
+        "title": "新建请求",
+        "category": "ApiMate",
+        "icon": "$(add)"
+      },
+      {
+        "command": "apimate.newCollection",
+        "title": "新建集合",
+        "category": "ApiMate",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "apimate.newFolder",
+        "title": "新建文件夹",
+        "category": "ApiMate",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "apimate.importCollection",
+        "title": "导入集合 / Import Collection",
+        "category": "ApiMate",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "apimate.exportCollection",
+        "title": "导出集合",
+        "category": "ApiMate",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "apimate.importCurl",
+        "title": "导入 cURL / Import cURL",
+        "category": "ApiMate",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "apimate.importOpenAPI",
+        "title": "从 OpenAPI/Swagger 导入",
+        "category": "ApiMate",
+        "icon": "$(file-code)"
+      },
+      {
+        "command": "apimate.importHAR",
+        "title": "从 HAR 导入",
+        "category": "ApiMate",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "apimate.switchEnvironment",
+        "title": "切换环境",
+        "category": "ApiMate",
+        "icon": "$(server-environment)"
+      },
+      {
+        "command": "apimate.manageEnvironments",
+        "title": "管理环境",
+        "category": "ApiMate",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "apimate.newEnvironment",
+        "title": "新建环境",
+        "category": "ApiMate",
+        "icon": "$(add)"
+      },
+      {
+        "command": "apimate.runCollection",
+        "title": "运行集合",
+        "category": "ApiMate",
+        "icon": "$(run-all)"
+      },
+      {
+        "command": "apimate.openRequest",
+        "title": "打开请求",
+        "category": "ApiMate",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "apimate.sendRequest",
+        "title": "发送请求",
+        "category": "ApiMate",
+        "icon": "$(play)"
+      },
+      {
+        "command": "apimate.duplicateRequest",
+        "title": "复制请求",
+        "category": "ApiMate",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "apimate.deleteRequest",
+        "title": "删除请求",
+        "category": "ApiMate",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "apimate.renameRequest",
+        "title": "重命名请求",
+        "category": "ApiMate",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "apimate.deleteCollection",
+        "title": "删除集合",
+        "category": "ApiMate",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "apimate.renameCollection",
+        "title": "重命名集合",
+        "category": "ApiMate",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "apimate.deleteFolder",
+        "title": "删除文件夹",
+        "category": "ApiMate",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "apimate.renameFolder",
+        "title": "重命名文件夹",
+        "category": "ApiMate",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "apimate.clearHistory",
+        "title": "清空历史 / Clear History",
+        "category": "ApiMate",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "apimate.testApi",
+        "title": "测试 API",
+        "category": "ApiMate",
+        "icon": "$(play)"
+      },
+      {
+        "command": "apimate.saveResponse",
+        "title": "保存响应到文件",
+        "category": "ApiMate",
+        "icon": "$(save)"
+      },
+      {
+        "command": "apimate.copyResponse",
+        "title": "复制响应",
+        "category": "ApiMate",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "apimate.exportAsCurl",
+        "title": "导出为 cURL",
+        "category": "ApiMate",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "apimate.viewCookies",
+        "title": "Cookie 管理 / Cookie Manager",
+        "category": "ApiMate",
+        "icon": "$(database)"
+      },
+      {
+        "command": "apimate.clearCookies",
+        "title": "清除 Cookie",
+        "category": "ApiMate",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "apimate.refreshData",
+        "title": "刷新数据",
+        "category": "ApiMate",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "apimate.showShortcuts",
+        "title": "快捷键说明 / Keyboard Shortcuts",
+        "category": "ApiMate",
+        "icon": "$(keyboard)"
+      },
+      {
+        "command": "apimate.openSettings",
+        "title": "插件设置 / settings",
+        "category": "ApiMate",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "apimate.viewLogs",
+        "title": "查看日志 / View Logs",
+        "category": "ApiMate",
+        "icon": "$(output)"
+      },
+      {
+        "command": "apimate.clearCache",
+        "title": "清理缓存",
+        "category": "ApiMate",
+        "icon": "$(trash)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "apimate.refreshData",
+          "when": "view == apimate.sidebar",
+          "group": "navigation@1"
+        },
+        {
+          "command": "apimate.importCurl",
+          "when": "view == apimate.sidebar",
+          "group": "2_more@1"
+        },
+        {
+          "command": "apimate.importCollection",
+          "when": "view == apimate.sidebar",
+          "group": "2_more@2"
+        },
+        {
+          "command": "apimate.viewCookies",
+          "when": "view == apimate.sidebar",
+          "group": "3_management@3"
+        },
+        {
+          "command": "apimate.viewLogs",
+          "when": "view == apimate.sidebar",
+          "group": "3_management@4"
+        },
+        {
+          "command": "apimate.clearHistory",
+          "when": "view == apimate.sidebar",
+          "group": "3_management@5"
+        },
+        {
+          "command": "apimate.showShortcuts",
+          "when": "view == apimate.sidebar",
+          "group": "4_tools@1"
+        },
+        {
+          "command": "apimate.openSettings",
+          "when": "view == apimate.sidebar",
+          "group": "4_tools@2"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "ApiMate",
+      "properties": {
+        "apimate.requestTimeout": {
+          "type": "number",
+          "default": 30000,
+          "description": "HTTP 请求超时时间（毫秒）。当请求在指定时间内未收到响应时将自动取消。增大此值适用于慢速接口或大文件下载场景，减小此值可快速发现无响应的服务。",
+          "minimum": 1000,
+          "maximum": 300000
+        },
+        "apimate.followRedirects": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否自动跟随 HTTP 3xx 重定向响应。启用后，遇到 301/302/307/308 等重定向状态码时会自动请求新地址；禁用则直接返回重定向响应，便于调试重定向链路。"
+        },
+        "apimate.maxRedirects": {
+          "type": "number",
+          "default": 5,
+          "description": "自动跟随重定向时的最大重定向次数。防止无限重定向循环，达到上限后停止并返回最后一次响应。",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "apimate.validateSSL": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否验证 HTTPS 请求的 SSL/TLS 证书。启用时会对自签名证书或过期证书报错；禁用后可正常请求使用自签名证书的本地开发服务器，但存在安全风险。"
+        },
+        "apimate.historyLimit": {
+          "type": "number",
+          "default": 100,
+          "description": "历史请求列表最大保存条数。超出限制后会自动移除最早的未置顶请求，置顶的请求不会被自动移除。增大此值可保留更多历史记录，但会占用更多存储空间。",
+          "minimum": 10,
+          "maximum": 1000
+        },
+        "apimate.autoSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "发送请求后是否自动保存到历史记录。启用后每次发送都会记录，禁用则需手动保存。"
+        },
+        "apimate.prettyPrintResponses": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否自动格式化 JSON/XML 响应内容。启用后响应体会自动缩进美化显示，便于阅读；禁用则显示原始紧凑格式，适用于需要精确查看原始响应的场景。"
+        },
+        "apimate.enableCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否在代码编辑器中启用 API 路由检测的 CodeLens 提示。启用后会在检测到的 API 路由上方显示「Send Request」快捷操作链接，点击即可直接发送请求。"
+        },
+        "apimate.defaultEnvironment": {
+          "type": "string",
+          "default": "",
+          "description": "启动时自动激活的环境 ID。留空则不自动激活任何环境。可在侧边栏环境列表中右键复制环境 ID 后填入此处。激活环境后，请求中的 {{变量名}} 会被替换为该环境对应的变量值。"
+        },
+        "apimate.storagePath": {
+          "type": "string",
+          "default": ".vscode/apimate",
+          "description": "集合和环境数据的存储路径，相对于工作区根目录。数据以 JSON 文件形式保存在此目录下，可纳入版本控制以便团队共享。修改后需重新加载数据。"
+        },
+        "apimate.scriptTimeout": {
+          "type": "number",
+          "default": 5000,
+          "description": "集合运行中前置脚本（Pre-request Script）和后置脚本（Post-response Script）的超时时间（毫秒）。脚本执行超过此时间将被强制终止，防止死循环或长时间阻塞。集合运行时此设置生效。",
+          "minimum": 1000,
+          "maximum": 30000
+        },
+        "apimate.maxParallel": {
+          "type": "number",
+          "default": 5,
+          "description": "集合运行时的最大并发请求数。控制同时发送的请求数量，增大可加快集合运行速度，但可能对目标服务器造成更大压力；减小则更温和。此设置与侧边栏集合列表中的运行设置保持同步。",
+          "minimum": 1,
+          "maximum": 100
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "apimate.newRequest",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+alt+n"
+      },
+      {
+        "command": "apimate.sendRequest",
+        "key": "ctrl+alt+s",
+        "mac": "cmd+alt+s"
+      },
+      {
+        "command": "apimate.switchEnvironment",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "compile": "tsc -p ./tsconfig.json",
+    "build": "npm run build:extension && npm run build:webview",
+    "build:extension": "node esbuild.js --production",
+    "build:webview": "cd webview && npm run build",
+    "watch": "node esbuild.js --watch",
+    "lint": "eslint src --ext ts",
+    "package": "npm run build && vsce package --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.85.0",
+    "@types/ws": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.28.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.9.0",
+    "@grpc/proto-loader": "^0.7.10",
+    "chai": "^4.3.10",
+    "faker": "^5.5.3",
+    "ws": "^8.14.0"
+  }
+}

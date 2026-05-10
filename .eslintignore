@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+out/
+*.vsix
+
+# Generated files
+**/*.d.ts
+
+# VS Code
+.vscode/
+
+# Test coverage
+coverage/
+
+# Webview build artifacts
+webview-ui/dist/
+webview-ui/build/
+
+# Configuration files
+*.config.js
+*.config.ts

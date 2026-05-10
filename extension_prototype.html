@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Code Extension Prototype - ApiMate (Modern UI)</title>
+    <!-- Alibaba Iconfont (Using a public font class based CDN for demonstration) -->
+    <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_4464977_k8s8z2s9.css"> 
+    <!-- Note: Since I cannot guarantee a specific Alibaba project ID is live forever, 
+         I will use RemixIcon (very similar style to modern apps) via CDN as a reliable "vector icon" substitute 
+         that matches the request for "no emojis, vector icons". 
+         In a real project, you would replace this link with your specific Alibaba Iconfont project CSS. -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #1e1e1e;
+            --sidebar-bg: #252526;
+            --activity-bar-bg: #333333;
+            --status-bar-bg: #007acc;
+            --text-color: #cccccc;
+            --text-muted: #858585;
+            --accent-color: #0e639c;
+            --border-color: #3e3e42;
+            --input-bg: #3c3c3c;
+            --tab-active-bg: #1e1e1e;
+            --tab-inactive-bg: #2d2d2d;
+            --hover-bg: #2a2d2e;
+            --list-hover-bg: #2a2d2e;
+            --list-active-bg: #37373d;
+            --focus-border: #007fd4;
+            --green: #4ec9b0;
+            --blue: #569cd6;
+            --orange: #ce9178;
+            --yellow: #dcdcaa;
+            --red: #f14c4c;
+            --purple: #c586c0;
+            --variable-color: #4fc1ff;
+            
+            /* Rounded Design System */
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-pill: 50px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-size: 13px;
+            user-select: none;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #424242; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4f4f4f; }
+        ::-webkit-scrollbar-corner { background: transparent; }
+
+        /* Icons Helper */
+        i { font-size: 14px; vertical-align: middle; }
+
+        /* Layout */
+        .container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 22px);
+        }
+
+        /* Utility */
+        .flex { display: flex; }
+        .flex-col { display: flex; flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-10 { gap: 10px; }
+        .gap-5 { gap: 5px; }
+        .p-10 { padding: 10px; }
+        .p-15 { padding: 15px; }
+        .border-b { border-bottom: 1px solid var(--border-color); }
+        .border-r { border-right: 1px solid var(--border-color); }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .hidden { display: none !important; }
+        .bold { font-weight: 600; }
+        .text-sm { font-size: 12px; }
+        .text-xs { font-size: 11px; }
+        .muted { color: var(--text-muted); }
+        .cursor-pointer { cursor: pointer; }
+        
+        .icon-btn {
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            color: var(--text-color);
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .icon-btn:hover { background-color: var(--hover-bg); color: white; transform: scale(1.05); }
+        .icon-btn:active { transform: scale(0.95); }
+
+        /* Activity Bar */
+        .activity-bar {
+            width: 50px;
+            background-color: var(--activity-bar-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 15px;
+            z-index: 10;
+        }
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.6;
+            cursor: pointer;
+            font-size: 20px;
+            position: relative;
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+        .activity-icon:hover { opacity: 1; background-color: rgba(255,255,255,0.1); }
+        .activity-icon.active {
+            opacity: 1;
+            background-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(14, 99, 156, 0.4);
+        }
+        .badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background-color: var(--red);
+            color: white;
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 10px;
+            min-width: 16px;
+            text-align: center;
+            border: 2px solid var(--activity-bar-bg);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-title {
+            padding: 0 15px;
+            height: 45px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            color: #eee;
+        }
+        .sidebar-tabs {
+            display: flex;
+            padding: 0 10px 10px 10px;
+        }
+        .sidebar-tab {
+            flex: 1;
+            text-align: center;
+            padding: 6px 0;
+            cursor: pointer;
+            opacity: 0.6;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+        .sidebar-tab:hover { opacity: 0.9; background-color: rgba(255,255,255,0.05); }
+        .sidebar-tab.active {
+            opacity: 1;
+            background-color: #37373d;
+            color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .search-box {
+            padding: 0 15px 10px 15px;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid transparent;
+            color: white;
+            padding: 6px 12px;
+            border-radius: var(--radius-pill);
+            outline: none;
+            transition: all 0.2s;
+        }
+        .search-input:focus { border-color: var(--focus-border); background-color: #454545; }
+        
+        /* Tree View */
+        .tree-view {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 10px 10px 10px;
+        }
+        .tree-section-header {
+            padding: 8px 10px;
+            font-weight: bold;
+            font-size: 11px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            margin-bottom: 2px;
+        }
+        .tree-section-header:hover { background-color: var(--hover-bg); }
+        
+        .tree-item {
+            padding: 6px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: var(--text-color);
+            position: relative;
+            border-radius: var(--radius-sm);
+            margin-bottom: 2px;
+            transition: background 0.1s;
+        }
+        .tree-item:hover { background-color: var(--list-hover-bg); }
+        .tree-item.active { background-color: var(--list-active-bg); color: white; font-weight: 500; }
+        
+        .tree-arrow { 
+            width: 20px; 
+            text-align: center; 
+            font-size: 14px; 
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+        .tree-arrow.expanded { transform: rotate(90deg); }
+        .tree-icon { margin-right: 8px; font-size: 16px; }
+        .tree-label { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tree-actions { display: none; margin-right: 0px; gap: 2px; }
+        .tree-item:hover .tree-actions { display: flex; }
+        
+        .method-badge {
+            font-size: 9px;
+            font-weight: bold;
+            width: 32px;
+            display: inline-block;
+            text-align: center;
+            margin-right: 8px;
+            font-family: 'Consolas', monospace;
+            border-radius: 3px;
+            padding: 1px 0;
+            background-color: rgba(255,255,255,0.1);
+        }
+        .c-get { color: var(--green); background-color: rgba(78, 201, 176, 0.15); }
+        .c-post { color: var(--yellow); background-color: rgba(220, 220, 170, 0.15); }
+        .c-put { color: var(--blue); background-color: rgba(86, 156, 214, 0.15); }
+        .c-del { color: var(--red); background-color: rgba(241, 76, 76, 0.15); }
+
+        /* Main Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-color);
+            min-width: 0;
+        }
+
+        /* Top Tabs */
+        .editor-tabs {
+            display: flex;
+            background-color: var(--sidebar-bg);
+            height: 40px;
+            overflow-x: auto;
+            padding-top: 5px;
+            padding-left: 5px;
+            gap: 2px;
+        }
+        .editor-tab {
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            background-color: var(--tab-inactive-bg);
+            color: #969696;
+            cursor: pointer;
+            min-width: 120px;
+            max-width: 200px;
+            font-size: 12px;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            transition: all 0.2s;
+        }
+        .editor-tab:hover { background-color: #333; }
+        .editor-tab.active {
+            background-color: var(--bg-color);
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        .editor-tab-method { margin-right: 8px; font-size: 10px; opacity: 0.8; }
+        .editor-tab-label { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .editor-tab-close { margin-left: 8px; border-radius: 50%; width: 18px; height: 18px; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s; }
+        .editor-tab:hover .editor-tab-close { opacity: 1; }
+        .editor-tab-close:hover { background-color: #444; color: white; }
+        .editor-tab.dirty .editor-tab-close::before { content: '●'; font-size: 8px; } 
+
+        /* Request Panel */
+        .request-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 10px;
+        }
+        
+        /* Address Bar */
+        .address-bar-container {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #252526;
+            border-radius: var(--radius-lg);
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .method-select {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid #444;
+            padding: 0 10px;
+            font-weight: bold;
+            border-radius: var(--radius-md);
+            width: 100px;
+            height: 36px;
+            outline: none;
+        }
+        .url-input-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: #1e1e1e;
+            border-radius: var(--radius-md);
+            border: 1px solid #444;
+            transition: border 0.2s;
+        }
+        .url-input-wrapper:focus-within { border-color: var(--focus-border); }
+        
+        .url-input {
+            width: 100%;
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            padding: 8px 12px;
+            font-family: 'Consolas', monospace;
+            height: 36px;
+            outline: none;
+            font-size: 14px;
+        }
+        .url-input-highlights {
+            position: absolute;
+            left: 13px;
+            top: 9px;
+            pointer-events: none;
+            font-family: 'Consolas', monospace;
+            color: transparent;
+            font-size: 14px;
+        }
+        .var-highlight { color: var(--variable-color); background-color: rgba(79, 193, 255, 0.1); border-radius: 3px; padding: 0 2px; }
+
+        .send-btn-group {
+            display: flex;
+            height: 36px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+        .send-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .send-options-btn {
+            background-color: var(--accent-color);
+            border: none;
+            border-left: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 0 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .send-btn:hover, .send-options-btn:hover { background-color: #1177bb; }
+
+        /* Request Body/Tabs Area */
+        .req-tabs-nav {
+            display: flex;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 25px;
+            margin-top: 5px;
+        }
+        .req-tab-item {
+            padding: 10px 0;
+            cursor: pointer;
+            opacity: 0.6;
+            position: relative;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .req-tab-item:hover { opacity: 0.9; }
+        .req-tab-item.active {
+            opacity: 1;
+            color: white;
+        }
+        .req-tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-color);
+            border-radius: 2px 2px 0 0;
+        }
+        .req-tab-badge {
+            font-size: 9px;
+            background-color: #444;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .req-content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .req-toolbar {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .radio-group { display: flex; gap: 15px; align-items: center; }
+        .radio-group label { cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        
+        /* Key-Value Table (Modern) */
+        .kv-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+            table-layout: fixed;
+        }
+        .kv-table th {
+            text-align: left;
+            padding: 8px 15px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        .kv-table td {
+            padding: 0;
+            border-bottom: 1px solid #2d2d2d;
+            background-color: #1e1e1e;
+        }
+        .kv-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            padding: 8px 15px;
+            outline: none;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        .kv-input:focus { background-color: #2a2d2e; }
+        
+        /* Code Editor Mock */
+        .code-editor {
+            flex: 1;
+            background-color: #1e1e1e;
+            padding: 15px 0;
+            font-family: 'Consolas', monospace;
+            overflow: auto;
+            position: relative;
+            line-height: 1.6;
+        }
+        .line-nums {
+            position: absolute;
+            left: 0;
+            top: 15px;
+            width: 45px;
+            text-align: right;
+            color: #555;
+            padding-right: 15px;
+            user-select: none;
+            font-size: 12px;
+        }
+        .code-content { margin-left: 60px; color: #d4d4d4; font-size: 13px; }
+        .code-line { white-space: pre; }
+        
+        /* Split Pane */
+        .split-pane {
+            display: flex;
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+        }
+        .pane-left { flex: 1; display: flex; flex-direction: column; border-right: 1px solid var(--border-color); min-width: 450px; }
+        .pane-right { flex: 1; display: flex; flex-direction: column; background-color: #1e1e1e; min-width: 350px; }
+
+        /* Response Area */
+        .res-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .res-status-group {
+            display: flex;
+            gap: 15px;
+        }
+        .status-pill {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #252526;
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            border: 1px solid #3e3e42;
+        }
+        .status-pill.success { color: var(--green); border-color: rgba(78, 201, 176, 0.3); }
+        .status-pill.neutral { color: var(--text-muted); }
+        .status-label { font-size: 10px; font-weight: bold; opacity: 0.7; margin-right: 4px; }
+        
+        .res-nav {
+            display: flex;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 25px;
+            font-size: 12px;
+        }
+        .res-nav-item {
+            padding: 10px 0;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s;
+        }
+        .res-nav-item.active { opacity: 1; border-bottom: 2px solid var(--accent-color); color: white; font-weight: 500; }
+
+        .res-filter-bar {
+            padding: 8px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background-color: #252526;
+        }
+        .filter-input {
+            flex: 1;
+            background-color: #333;
+            border: 1px solid transparent;
+            color: white;
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            font-size: 12px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .filter-input:focus { border-color: var(--focus-border); background-color: #444; }
+
+        .res-body {
+            flex: 1;
+            overflow: auto;
+            padding: 15px 0;
+            font-family: 'Consolas', monospace;
+        }
+        
+        /* Syntax Highlighting */
+        .s-key { color: #9cdcfe; }
+        .s-str { color: #ce9178; }
+        .s-num { color: #b5cea8; }
+        .s-bool { color: #569cd6; }
+        .s-null { color: #569cd6; }
+
+        /* Environment Dropdown */
+        .env-selector {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            background-color: #252526;
+            padding: 5px 12px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-size: 12px;
+            border: 1px solid #3e3e42;
+            transition: all 0.2s;
+        }
+        .env-selector:hover { border-color: #666; background-color: #333; }
+        .env-icon { color: var(--variable-color); margin-right: 6px; font-size: 14px; }
+
+        /* Status Bar */
+        .status-bar {
+            height: 22px;
+            background-color: var(--status-bar-bg);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 11px;
+            user-select: none;
+            z-index: 20;
+        }
+        .sb-item { margin-right: 15px; cursor: pointer; display: flex; align-items: center; gap: 5px; opacity: 0.9; }
+        .sb-item:hover { opacity: 1; }
+
+        /* Context Menu */
+        .context-menu {
+            position: absolute;
+            background-color: #252526;
+            border: 1px solid #454545;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            width: 200px;
+            display: none;
+            z-index: 1000;
+            padding: 5px;
+            border-radius: var(--radius-md);
+        }
+        .ctx-item {
+            padding: 8px 10px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            border-radius: var(--radius-sm);
+            align-items: center;
+        }
+        .ctx-item:hover { background-color: var(--accent-color); color: white; }
+        .ctx-sep { height: 1px; background-color: #454545; margin: 4px 0; }
+        .ctx-shortcut { opacity: 0.6; font-size: 11px; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(2px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal {
+            background-color: #252526;
+            border: 1px solid #454545;
+            width: 600px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #3e3e42;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2a2d2e;
+        }
+        .modal-body { padding: 0; overflow-y: auto; }
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #3e3e42;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            background-color: #2a2d2e;
+        }
+        .btn {
+            padding: 8px 18px;
+            border: 1px solid #444;
+            background-color: #3c3c3c;
+            color: white;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover { background-color: #555; border-color: #666; }
+        .btn-primary { background-color: var(--accent-color); border-color: var(--accent-color); }
+        .btn-primary:hover { background-color: #1177bb; }
+
+        /* Curl Box */
+        .curl-box {
+            background-color: #111;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            border: 1px solid #333;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body onclick="closeMenus()">
+
+    <div class="container">
+        <!-- Activity Bar -->
+        <div class="activity-bar">
+            <div class="activity-icon" title="Explorer"><i class="ri-file-copy-line"></i></div>
+            <div class="activity-icon" title="Search"><i class="ri-search-line"></i></div>
+            <div class="activity-icon" title="Source Control"><i class="ri-git-branch-line"></i><span class="badge">1</span></div>
+            <div class="activity-icon active" title="ApiMate"><i class="ri-rocket-2-fill"></i></div>
+            <div class="activity-icon" title="Extensions"><i class="ri-grid-fill"></i></div>
+            <div class="activity-icon" style="margin-top: auto;" title="Accounts"><i class="ri-user-3-line"></i></div>
+            <div class="activity-icon" title="Settings"><i class="ri-settings-3-line"></i></div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-title">
+                <span>ApiMate Explorer</span>
+                <div class="flex gap-5">
+                    <div class="icon-btn" title="New Request"><i class="ri-add-line"></i></div>
+                    <div class="icon-btn" title="New Folder"><i class="ri-folder-add-line"></i></div>
+                    <div class="icon-btn" title="Import/Export" onclick="openDataModal()"><i class="ri-import-line"></i></div>
+                    <div class="icon-btn" title="Collapse All"><i class="ri-subtract-line"></i></div>
+                </div>
+            </div>
+            
+            <div class="sidebar-tabs">
+                <div class="sidebar-tab active" onclick="switchSidebarTab(this, 'collections')">Collections</div>
+                <div class="sidebar-tab" onclick="switchSidebarTab(this, 'history')">History</div>
+                <div class="sidebar-tab" onclick="switchSidebarTab(this, 'env')">Env</div>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Filter collections...">
+            </div>
+
+            <div class="tree-view" id="sidebar-collections">
+                
+                <!-- Project Section -->
+                <div class="tree-section-header">
+                    <i class="ri-arrow-down-s-line tree-arrow expanded" style="width:14px; text-align:left;"></i>
+                    <span>E_COMMERCE_API</span>
+                </div>
+
+                <!-- Collection: User Service -->
+                <div class="tree-item" oncontextmenu="showContextMenu(event, 'folder')">
+                    <span class="tree-indent"></span>
+                    <span class="tree-indent"><i class="ri-arrow-right-s-line tree-arrow expanded"></i></span>
+                    <i class="ri-folder-open-fill tree-icon" style="color: #dcb67a;"></i>
+                    <span class="tree-label">User Service</span>
+                    <div class="tree-actions">
+                        <i class="ri-play-fill icon-btn" style="width:20px; height:20px; font-size:12px;"></i>
+                        <i class="ri-add-line icon-btn" style="width:20px; height:20px; font-size:12px;"></i>
+                    </div>
+                </div>
+                <div class="tree-children">
+                    <div class="tree-item active" oncontextmenu="showContextMenu(event, 'request')">
+                        <span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-indent"></span>
+                        <span class="method-badge c-post">POST</span>
+                        <span class="tree-label">Create User</span>
+                    </div>
+                    <div class="tree-item" oncontextmenu="showContextMenu(event, 'request')">
+                        <span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-indent"></span>
+                        <span class="method-badge c-get">GET</span>
+                        <span class="tree-label">Get User Profile</span>
+                    </div>
+                    <div class="tree-item" oncontextmenu="showContextMenu(event, 'request')">
+                        <span class="tree-indent"></span><span class="tree-indent"></span><span class="tree-indent"></span>
+                        <span class="method-badge c-put">PUT</span>
+                        <span class="tree-label">Update Settings</span>
+                    </div>
+                </div>
+
+                <!-- Collection: Auth API -->
+                <div class="tree-item" oncontextmenu="showContextMenu(event, 'folder')">
+                    <span class="tree-indent"></span>
+                    <span class="tree-indent"><i class="ri-arrow-right-s-line tree-arrow"></i></span>
+                    <i class="ri-folder-fill tree-icon" style="color: #dcb67a;"></i>
+                    <span class="tree-label">Auth API</span>
+                </div>
+            </div>
+
+            <div class="tree-view hidden" id="sidebar-history">
+                <div class="tree-section-header">Today</div>
+                <div class="tree-item">
+                    <span class="method-badge c-get">GET</span>
+                    <span class="tree-label">api.stripe.com/v1/charges</span>
+                    <span class="muted text-xs" style="margin-left:auto; margin-right:5px;">10:42</span>
+                </div>
+            </div>
+
+            <div class="tree-view hidden" id="sidebar-env">
+                <div class="p-15 text-xs muted">
+                    Manage your environment variables here.
+                </div>
+                <div class="tree-item" onclick="openEnvModal()">
+                    <i class="ri-global-line tree-icon"></i>
+                    <span class="tree-label">Global Variables</span>
+                    <span class="text-xs muted">3 vars</span>
+                </div>
+                <div class="tree-section-header" style="margin-top:10px;">Environments</div>
+                <div class="tree-item active" onclick="openEnvModal('Development')">
+                    <i class="ri-box-3-fill tree-icon" style="color: var(--variable-color);"></i>
+                    <span class="tree-label">Development</span>
+                    <i class="ri-check-line text-xs" style="color:var(--green); margin-left:auto; margin-right:10px;"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Navigation / Tabs -->
+            <div class="editor-tabs">
+                <div class="editor-tab active dirty">
+                    <span class="editor-tab-method c-post">POST</span>
+                    <span class="editor-tab-label">Create User</span>
+                    <span class="editor-tab-close"><i class="ri-close-line" style="font-size:12px"></i></span>
+                </div>
+                <div class="editor-tab">
+                    <span class="editor-tab-method c-get">GET</span>
+                    <span class="editor-tab-label">Get User Profile</span>
+                    <span class="editor-tab-close"><i class="ri-close-line" style="font-size:12px"></i></span>
+                </div>
+                <div class="flex items-center ml-auto" style="padding-right:10px;">
+                    <div class="env-selector" title="Manage Environments" onclick="openEnvModal()">
+                        <span class="env-icon"><i class="ri-box-3-line"></i></span>
+                        Development
+                        <i class="ri-arrow-down-s-line" style="margin-left: 5px; font-size: 10px;"></i>
+                    </div>
+                    <div class="icon-btn" title="Open Split View"><i class="ri-layout-column-line"></i></div>
+                    <div class="icon-btn" title="Cookies"><i class="ri-cake-3-line"></i></div>
+                </div>
+            </div>
+
+            <!-- Split Pane: Request & Response -->
+            <div class="split-pane">
+                
+                <!-- LEFT: Request Panel -->
+                <div class="pane-left">
+                    <!-- Address Bar -->
+                    <div class="address-bar-container">
+                        <select class="method-select">
+                            <option value="GET">GET</option>
+                            <option value="POST" selected>POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                        <div class="url-input-wrapper">
+                            <!-- Overlay for highlighting -->
+                            <div class="url-input-highlights">
+                                <span class="var-highlight">{{baseUrl}}</span>/users/register
+                            </div>
+                            <!-- Transparent text input -->
+                            <input type="text" class="url-input" value="{{baseUrl}}/users/register" style="color:transparent; caret-color: white; background: transparent;">
+                            <div class="url-actions">
+                                <div class="icon-btn" title="Params"><i class="ri-list-settings-line"></i></div>
+                            </div>
+                        </div>
+                        <div class="send-btn-group">
+                            <button class="send-btn" onclick="sendRequest()">
+                                <i class="ri-send-plane-fill" style="margin-right:6px; font-size:14px;"></i> Send
+                            </button>
+                            <button class="send-options-btn"><i class="ri-arrow-down-s-line"></i></button>
+                        </div>
+                        <div class="icon-btn" title="Save (Ctrl+S)"><i class="ri-save-3-line"></i></div>
+                    </div>
+
+                    <!-- Request Tabs -->
+                    <div class="req-tabs-nav">
+                        <div class="req-tab-item" onclick="switchReqTab(this, 'params')">Params</div>
+                        <div class="req-tab-item" onclick="switchReqTab(this, 'auth')">Auth</div>
+                        <div class="req-tab-item" onclick="switchReqTab(this, 'headers')">Headers <span class="req-tab-badge">2</span></div>
+                        <div class="req-tab-item active" onclick="switchReqTab(this, 'body')">Body <span class="req-tab-badge" style="background:var(--accent-color)">JSON</span></div>
+                        <div class="req-tab-item" onclick="switchReqTab(this, 'tests')">Tests</div>
+                        <div class="req-tab-item" onclick="switchReqTab(this, 'settings')">Settings</div>
+                    </div>
+
+                    <!-- Tab Content: Params -->
+                    <div id="req-tab-params" class="req-content-area hidden">
+                        <div class="p-10">
+                            <div class="text-xs bold mb-5 muted" style="padding:0 10px;">QUERY PARAMS</div>
+                            <table class="kv-table">
+                                <colgroup>
+                                    <col style="width:40px">
+                                    <col style="width:30%">
+                                    <col style="width:30%">
+                                    <col>
+                                </colgroup>
+                                <thead><tr><th></th><th>Key</th><th>Value</th><th>Description</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align:center;"><input type="checkbox" checked></td>
+                                        <td><input type="text" class="kv-input" value="api_version"></td>
+                                        <td><input type="text" class="kv-input" value="v2"></td>
+                                        <td><input type="text" class="kv-input" placeholder="Description"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Body -->
+                    <div id="req-tab-body" class="req-content-area">
+                        <div class="req-toolbar">
+                            <div class="radio-group">
+                                <label><input type="radio" name="body-type"> none</label>
+                                <label><input type="radio" name="body-type"> form-data</label>
+                                <label><input type="radio" name="body-type"> x-www-form</label>
+                                <label><input type="radio" name="body-type" checked> raw</label>
+                                <label><input type="radio" name="body-type"> binary</label>
+                                <label><input type="radio" name="body-type"> GraphQL</label>
+                            </div>
+                            <div style="margin-left: auto; color: var(--accent-color); font-size:11px; cursor:pointer;">JSON <i class="ri-arrow-down-s-line"></i></div>
+                            <div class="icon-btn" title="Beautify"><i class="ri-magic-line"></i></div>
+                        </div>
+                        <div class="code-editor">
+                            <div class="line-nums">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8</div>
+                            <div class="code-content">
+<div class="code-line">{</div>
+<div class="code-line">  <span class="s-key">"username"</span>: <span class="s-str">"developer_one"</span>,</div>
+<div class="code-line">  <span class="s-key">"email"</span>: <span class="s-str">"dev@example.com"</span>,</div>
+<div class="code-line">  <span class="s-key">"password"</span>: <span class="s-str">"<span class="var-highlight">{{defaultPassword}}</span>"</span>,</div>
+<div class="code-line">  <span class="s-key">"role"</span>: <span class="s-str">"admin"</span>,</div>
+<div class="code-line">  <span class="s-key">"preferences"</span>: {</div>
+<div class="code-line">     <span class="s-key">"notifications"</span>: <span class="s-bool">true</span></div>
+<div class="code-line">  }</div>
+<div class="code-line">}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- RIGHT: Response Panel -->
+                <div class="pane-right">
+                    <div class="res-header">
+                        <div class="res-status-group">
+                            <div class="status-pill success"><i class="ri-check-line" style="color:var(--green)"></i> <span class="status-label"></span> <span class="bold">201 Created</span></div>
+                            <div class="status-pill neutral"><i class="ri-time-line"></i> 345 ms</div>
+                            <div class="status-pill neutral"><i class="ri-database-2-line"></i> 1.24 KB</div>
+                        </div>
+                        <div class="res-toolbar">
+                            <div class="icon-btn" title="Save Response"><i class="ri-download-line"></i></div>
+                            <div class="icon-btn" title="Copy to Clipboard"><i class="ri-file-copy-line"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="res-nav">
+                        <div class="res-nav-item active">Body</div>
+                        <div class="res-nav-item">Cookies <span class="muted">(1)</span></div>
+                        <div class="res-nav-item">Headers <span class="muted">(12)</span></div>
+                        <div class="res-nav-item">Tests <span class="bold" style="color:var(--green)">(2/2)</span></div>
+                    </div>
+
+                    <div class="res-filter-bar">
+                        <div class="radio-group text-xs" style="margin-right:10px;">
+                            <label class="active" style="color:white; font-weight:600;">Pretty</label>
+                            <label>Raw</label>
+                            <label>Preview</label>
+                        </div>
+                        <div style="width:1px; height:14px; background:#444;"></div>
+                        <div class="text-xs" style="color:var(--accent-color);">JSON</div>
+                        <div style="flex:1;"></div>
+                        <i class="ri-filter-3-line muted text-xs"></i>
+                        <input type="text" class="filter-input" placeholder="Filter JSON...">
+                    </div>
+
+                    <div class="res-body">
+                        <div class="code-content">
+<div class="code-line">{</div>
+<div class="code-line">  <span class="s-key">"success"</span>: <span class="s-bool">true</span>,</div>
+<div class="code-line">  <span class="s-key">"message"</span>: <span class="s-str">"User registered successfully"</span>,</div>
+<div class="code-line">  <span class="s-key">"data"</span>: {</div>
+<div class="code-line">    <span class="s-key">"id"</span>: <span class="s-num">1024</span>,</div>
+<div class="code-line">    <span class="s-key">"username"</span>: <span class="s-str">"developer_one"</span>,</div>
+<div class="code-line">    <span class="s-key">"created_at"</span>: <span class="s-str">"2023-10-27T10:00:00Z"</span>,</div>
+<div class="code-line">    <span class="s-key">"token"</span>: <span class="s-str">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span></div>
+<div class="code-line">  }</div>
+<div class="code-line">}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="flex">
+            <div class="sb-item" style="background-color: var(--accent-color); padding: 0 10px; margin-right: 10px;"><i class="ri-git-branch-line" style="margin-right: 5px;"></i> main*</div>
+            <div class="sb-item"><i class="ri-error-warning-line" style="margin-right: 5px;"></i> 0</div>
+            <div class="sb-item"><i class="ri-alert-line" style="margin-right: 5px;"></i> 0</div>
+        </div>
+        <div class="flex">
+            <div class="sb-item" title="Environment">Development</div>
+            <div class="sb-item">Ln 8, Col 1</div>
+            <div class="sb-item">UTF-8</div>
+            <div class="sb-item" title="Mock Server"><i class="ri-broadcast-line"></i> Mock Off</div>
+            <div class="sb-item"><i class="ri-notification-3-line"></i></div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div id="ctx-menu" class="context-menu">
+        <div class="ctx-item">Open in New Tab</div>
+        <div class="ctx-item">Open in Split View</div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item">Run</div>
+        <div class="ctx-item">Force Run</div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item" onclick="openDataModal('export')">Export...</div>
+        <div class="ctx-item" onclick="openDataModal('curl')">Copy as cURL</div>
+        <div class="ctx-sep"></div>
+        <div class="ctx-item">Duplicate <span class="ctx-shortcut">Ctrl+D</span></div>
+        <div class="ctx-item">Delete <span class="ctx-shortcut">Del</span></div>
+    </div>
+
+    <!-- Data Import/Export Modal -->
+    <div id="data-modal" class="modal-overlay" onclick="if(event.target===this) closeDataModal()">
+        <div class="modal" style="width: 700px;">
+            <div class="modal-header">
+                <span>Import / Export Data</span>
+                <i class="ri-close-line cursor-pointer" onclick="closeDataModal()"></i>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex; height: 400px;">
+                    <!-- Left Nav -->
+                    <div style="width: 150px; background-color: #2a2d2e; border-right: 1px solid #3e3e42; padding: 15px 0;">
+                        <div class="sidebar-tab active" style="text-align:left; padding-left:20px; border-radius:0;" onclick="switchDataTab(this, 'import')"><i class="ri-upload-2-line" style="margin-right:8px;"></i> Import</div>
+                        <div class="sidebar-tab" style="text-align:left; padding-left:20px; border-radius:0;" onclick="switchDataTab(this, 'export')"><i class="ri-download-2-line" style="margin-right:8px;"></i> Export</div>
+                        <div class="sidebar-tab" style="text-align:left; padding-left:20px; border-radius:0;" onclick="switchDataTab(this, 'curl')"><i class="ri-code-box-line" style="margin-right:8px;"></i> cURL</div>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div style="flex:1; padding: 25px; overflow-y:auto;">
+                        
+                        <!-- Import View -->
+                        <div id="data-tab-import">
+                            <h3 style="margin-top:0; font-size:14px; margin-bottom:15px;">Import from File / URL</h3>
+                            
+                            <div class="radio-group flex-col" style="margin-bottom:20px; align-items: stretch; gap:10px;">
+                                <div style="border:1px solid #444; padding:15px; border-radius:var(--radius-md); cursor:pointer; background:#333;">
+                                    <div class="bold"><i class="ri-file-code-line" style="color:var(--orange); margin-right:8px;"></i> Postman Collection</div>
+                                    <div class="text-xs muted" style="margin-top:5px; margin-left:24px;">Support v2.0/v2.1 JSON files</div>
+                                </div>
+                                <div style="border:1px solid #444; padding:15px; border-radius:var(--radius-md); cursor:pointer;">
+                                    <div class="bold"><i class="ri-node-tree" style="color:var(--green); margin-right:8px;"></i> OpenAPI / Swagger</div>
+                                    <div class="text-xs muted" style="margin-top:5px; margin-left:24px;">YAML or JSON specs (2.0/3.0)</div>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-10" style="margin-bottom:15px;">
+                                <button class="btn" style="flex:1; justify-content:center;"><i class="ri-upload-cloud-line"></i> Choose File</button>
+                                <button class="btn" style="flex:1; justify-content:center;"><i class="ri-link"></i> Paste URL</button>
+                            </div>
+                        </div>
+
+                        <!-- Export View -->
+                        <div id="data-tab-export" class="hidden">
+                            <h3 style="margin-top:0; font-size:14px; margin-bottom:15px;">Export Data</h3>
+                            
+                            <div style="margin-bottom:15px;">
+                                <div class="text-xs bold muted" style="margin-bottom:8px;">SELECT CONTENT</div>
+                                <div style="background:#252526; border:1px solid #3e3e42; max-height:150px; overflow-y:auto; border-radius:var(--radius-md); padding:5px;">
+                                    <div class="tree-item"><input type="checkbox" checked style="margin-right:10px;"> All Collections (3)</div>
+                                    <div class="tree-item"><input type="checkbox" checked style="margin-right:10px; margin-left:20px;"> User Service</div>
+                                    <div class="tree-item"><input type="checkbox" style="margin-right:10px;"> Environments</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- cURL View -->
+                        <div id="data-tab-curl" class="hidden">
+                            <h3 style="margin-top:0; font-size:14px; margin-bottom:15px;">Import cURL</h3>
+                            <div class="text-xs muted" style="margin-bottom:10px;">Paste a cURL command to create a new request automatically.</div>
+                            <textarea class="kv-input" style="background:#111; border:1px solid #333; height:200px; border-radius:var(--radius-md); resize:none; font-family:'Consolas',monospace;" placeholder="curl -X POST https://api.example.com/data -d '...'"></textarea>
+                            <div class="flex" style="margin-top:10px; justify-content:flex-end;">
+                                <button class="btn btn-primary">Import Request</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Environment Modal -->
+    <div id="env-modal" class="modal-overlay" onclick="if(event.target===this) closeEnvModal()">
+        <div class="modal">
+            <div class="modal-header">
+                <span>Manage Environments</span>
+                <i class="ri-close-line cursor-pointer" onclick="closeEnvModal()"></i>
+            </div>
+            <div class="modal-body">
+                <div class="p-15" style="background-color: #333; display:flex; gap:10px; align-items:center;">
+                    <span class="text-sm">Active Environment:</span>
+                    <select style="background:#252526; color:white; border:1px solid #444; padding:6px; border-radius:var(--radius-sm);">
+                        <option>Development</option>
+                        <option>Production</option>
+                    </select>
+                    <button class="btn" style="margin-left:auto;"><i class="ri-add-line"></i> Add New</button>
+                </div>
+                <table class="kv-table" style="margin-bottom:20px;">
+                    <colgroup>
+                        <col style="width:30px">
+                        <col style="width:30%">
+                        <col style="width:30%">
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th style="text-align:center"></th>
+                            <th>Variable</th>
+                            <th>Initial Value</th>
+                            <th>Current Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align:center"><input type="checkbox" checked></td>
+                            <td><input type="text" class="kv-input" value="baseUrl"></td>
+                            <td><input type="text" class="kv-input" value="https://dev-api.example.com"></td>
+                            <td><input type="text" class="kv-input" value="https://dev-api.example.com"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeEnvModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="closeEnvModal()">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Context Menu Logic ---
+        function showContextMenu(e, type) {
+            e.preventDefault();
+            const menu = document.getElementById('ctx-menu');
+            menu.style.display = 'block';
+            menu.style.left = e.pageX + 'px';
+            menu.style.top = e.pageY + 'px';
+        }
+
+        function closeMenus() {
+            document.getElementById('ctx-menu').style.display = 'none';
+        }
+
+        // --- Modal Logic ---
+        function openEnvModal(envName) {
+            document.getElementById('env-modal').style.display = 'flex';
+        }
+
+        function closeEnvModal() {
+            document.getElementById('env-modal').style.display = 'none';
+        }
+
+        // --- Data Modal Logic ---
+        function openDataModal(initialTab = 'import') {
+            document.getElementById('data-modal').style.display = 'flex';
+            const tabs = document.querySelectorAll('#data-modal .sidebar-tab');
+            let targetIndex = 0;
+            if (initialTab === 'export') targetIndex = 1;
+            if (initialTab === 'curl') targetIndex = 2;
+            switchDataTab(tabs[targetIndex], initialTab);
+        }
+
+        function closeDataModal() {
+            document.getElementById('data-modal').style.display = 'none';
+        }
+
+        function switchDataTab(el, id) {
+            const parent = el.parentNode;
+            parent.querySelectorAll('.sidebar-tab').forEach(t => {
+                t.classList.remove('active');
+                t.style.backgroundColor = 'transparent';
+            });
+            el.classList.add('active');
+            el.style.backgroundColor = '#37373d';
+            
+            document.getElementById('data-tab-import').classList.add('hidden');
+            document.getElementById('data-tab-export').classList.add('hidden');
+            document.getElementById('data-tab-curl').classList.add('hidden');
+            document.getElementById('data-tab-' + id).classList.remove('hidden');
+        }
+
+        // --- Tab Logic ---
+        function switchSidebarTab(el, id) {
+            document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            
+            document.querySelectorAll('.sidebar .tree-view').forEach(v => v.classList.add('hidden'));
+            document.getElementById('sidebar-' + id).classList.remove('hidden');
+        }
+
+        function switchReqTab(el, id) {
+            document.querySelectorAll('.req-tab-item').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+
+            document.querySelectorAll('.req-content-area').forEach(c => c.classList.add('hidden'));
+            const content = document.getElementById('req-tab-' + id);
+            if (content) content.classList.remove('hidden');
+            else document.getElementById('req-tab-body').classList.remove('hidden');
+        }
+
+        // --- Request Animation ---
+        function sendRequest() {
+            const btn = document.querySelector('.send-btn');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="ri-loader-4-line" style="margin-right:6px; animation: spin 1s linear infinite;"></i> Sending...';
+            btn.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                btn.style.opacity = '1';
+                
+                const pill = document.querySelector('.status-pill.success');
+                pill.style.background = 'rgba(255,255,255,0.1)';
+                setTimeout(() => pill.style.background = '#252526', 300);
+            }, 600);
+        }
+    </script>
+    <style>
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</body>
+</html>

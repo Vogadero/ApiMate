@@ -1,0 +1,187 @@
+.collection-tree {
+  padding: 0;
+}
+
+.tree-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.tree-header-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.header-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+  border-radius: var(--radius);
+  transition: all 0.15s;
+}
+
+.header-action:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.new-collection-form {
+  display: flex;
+  gap: 4px;
+  padding: 4px 8px;
+}
+
+.new-collection-form input {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+}
+
+.form-confirm {
+  color: #49cc90;
+}
+
+.form-cancel {
+  color: var(--text-muted);
+}
+
+.tree-collection, .tree-folder {
+  user-select: none;
+}
+
+.tree-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.1s;
+  min-height: 28px;
+}
+
+.tree-item:hover {
+  background: var(--bg-hover);
+}
+
+.collection-item {
+  font-weight: 600;
+  padding-left: 8px;
+}
+
+.collection-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.collection-actions {
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.collection-item:hover .collection-actions {
+  opacity: 1;
+}
+
+.tree-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-radius: var(--radius);
+}
+
+.tree-action:hover {
+  color: var(--text-primary);
+  background: var(--bg-active);
+}
+
+.folder-item {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.request-item {
+  font-size: 12px;
+}
+
+.method-badge {
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 36px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.request-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.collection-children, .folder-children {
+  padding-left: 8px;
+}
+
+.tree-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.tree-empty-state i {
+  font-size: 32px;
+  color: var(--text-muted);
+  opacity: 0.4;
+  margin-bottom: 8px;
+}
+
+.tree-empty-state p {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.tree-empty-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #49cc90;
+  border: 1px solid #49cc90;
+  border-radius: var(--radius);
+  transition: all 0.15s;
+}
+
+.tree-empty-action:hover {
+  background: rgba(73, 204, 144, 0.1);
+  color: #3db87e;
+  border-color: #3db87e;
+}
