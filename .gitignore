@@ -13,6 +13,10 @@ webview/dist
 webview/node_modules
 webview/.vite
 
+docs/node_modules
+docs/.vitepress/dist
+docs/.vitepress/cache
+
 .history/
 .trae/
 .kiro/

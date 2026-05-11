@@ -1,0 +1,18 @@
+:root {
+  --vp-c-brand-1: #4f8ff7;
+  --vp-c-brand-2: #3a6fd8;
+  --vp-c-brand-3: #2b5cc0;
+  --vp-c-brand-soft: rgba(79, 143, 247, 0.14);
+}
+
+.VPHero .image-src {
+  border-radius: 16px;
+}
+
+.VPFeature {
+  transition: transform 0.2s ease;
+}
+
+.VPFeature:hover {
+  transform: translateY(-2px);
+}

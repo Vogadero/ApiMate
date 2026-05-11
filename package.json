@@ -1,5 +1,5 @@
 {
-  "name": "apimate",
+  "name": "apimatex",
   "displayName": "ApiMate - API Testing Tool",
   "description": "A full-featured API testing extension for VS Code. Supports HTTP, gRPC, WebSocket, SSE, collections, environments, auth, scripts, and automated testing.",
   "version": "0.0.4",
