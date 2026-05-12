@@ -168,7 +168,7 @@ Import environment variables from `.env` files:
 4. Sensitive variable names (containing `key`, `secret`, `password`, `token`, `auth`) are automatically marked as secret
 
 Example `.env` file:
-```env
+```bash
 BASE_URL=https://api.example.com
 API_KEY=sk-abc123def456
 DB_PASSWORD=mysecretpassword

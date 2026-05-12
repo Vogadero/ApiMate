@@ -4,6 +4,7 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'ApiMate',
   description: 'A full-featured API testing extension for VS Code',
+  base: '/ApiMate/',
   head: [
     ['link', { rel: 'icon', type: 'image/png', href: '/icon.png' }]
   ],

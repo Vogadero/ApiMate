@@ -68,13 +68,13 @@ All ApiMate data is stored as JSON files in your workspace:
 
 To share collections and environments but not history:
 
-```gitignore
+```plaintext
 .vscode/apimate/history.json
 ```
 
 To keep everything private:
 
-```gitignore
+```plaintext
 .vscode/apimate/
 ```
 
