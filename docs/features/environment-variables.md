@@ -4,7 +4,7 @@ Environment variables are a core feature that allows you to define and switch be
 
 ## Environment Management
 
-<!-- @screenshot: environment-manager.png - Show the environment management interface -->
+![Environment management interface](/environment-manager.png)
 
 ### Creating Environments
 
@@ -34,7 +34,7 @@ Environment variables are a core feature that allows you to define and switch be
 
 ## Global Variables
 
-<!-- @screenshot: global-variables.png - Show the global variables editor -->
+![Global variables editor](/global-variables.png)
 
 Global variables are shared across all environments:
 
@@ -54,7 +54,7 @@ Global variables are shared across all environments:
 
 ## Secret Variables
 
-<!-- @screenshot: secret-variables.png - Show the secret variable toggle and masked display -->
+![Secret variable toggle and masked display](/secret-variables.png)
 
 Secret variables provide secure storage for sensitive data like API keys and tokens:
 
@@ -71,8 +71,6 @@ Secret variables provide secure storage for sensitive data like API keys and tok
 4. When sending a request, the real value is retrieved from SecretStorage
 
 ## Variable Resolution
-
-<!-- @screenshot: variable-resolution.png - Show the variable resolution preview -->
 
 ### Using Variables in Requests
 
@@ -135,7 +133,7 @@ ApiMate provides built-in dynamic variables that generate values at request time
 
 ### Variable Resolution Preview
 
-<!-- @screenshot: variable-preview.png - Show the variable resolution preview section -->
+![Variable resolution preview section](/variable-preview.png)
 
 The environment detail view includes a **Variable Resolution Preview** section that shows:
 
@@ -158,7 +156,7 @@ If a variable name cannot be resolved from any source, it remains as-is in the r
 
 ## Import from .env Files
 
-<!-- @screenshot: import-env.png - Show the .env import dialog -->
+![.env import dialog](/import-env.png)
 
 Import environment variables from `.env` files:
 

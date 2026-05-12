@@ -4,8 +4,6 @@ ApiMate supports importing and exporting data in various formats, making it easy
 
 ## Import Formats
 
-<!-- @screenshot: import-dialog.png - Show the import dialog with format options -->
-
 ### Postman Collection (v2.1)
 
 Import collections exported from Postman:
@@ -87,8 +85,6 @@ Import environment configurations exported from ApiMate or compatible tools:
 
 ## Export Formats
 
-<!-- @screenshot: export-dialog.png - Show the export options -->
-
 ### Export Collections as JSON
 
 Export a collection to share with team members or backup:
@@ -133,7 +129,7 @@ Generate a cURL command for any request:
 curl -X POST 'https://api.example.com/users' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer your-token' \
-  -d '{"name": "John", "email": "john@example.com"}'
+  -d '{"Name": "John", "email": "john@example.com"}'
 ```
 
 ### Save Responses to Files

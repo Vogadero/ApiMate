@@ -4,8 +4,6 @@ ApiMate provides a powerful scripting engine for automating request workflows an
 
 ## Pre-request Scripts
 
-<!-- @screenshot: pre-request-script.png - Show the pre-request script editor -->
-
 Pre-request scripts run **before** a request is sent. Use them to:
 
 - Set or modify variables
@@ -56,8 +54,6 @@ pm.request.headers.add({
 ```
 
 ## Post-response Scripts
-
-<!-- @screenshot: post-response-script.png - Show the post-response script editor -->
 
 Post-response scripts run **after** a response is received. Use them to:
 
@@ -142,8 +138,6 @@ The `pm` object provides access to request, response, and environment data.
 | `console.info(...)` | Log an info message |
 
 ## Test Assertions
-
-<!-- @screenshot: test-assertions.png - Show test results with pass/fail indicators -->
 
 ApiMate uses Chai.js for assertions, providing a rich and expressive syntax.
 

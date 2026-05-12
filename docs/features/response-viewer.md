@@ -4,7 +4,7 @@ After sending a request, the Response Viewer displays the complete server respon
 
 ## Response Display
 
-<!-- @screenshot: response-viewer.png - Show the full response viewer with body, headers, and status -->
+![Full response viewer with body, headers, and status](/response-viewer.png)
 
 ### Response Body
 
@@ -26,15 +26,13 @@ The response body is displayed with syntax highlighting based on the Content-Typ
 
 ### Response Headers
 
-<!-- @screenshot: response-headers.png - Show the response headers viewer -->
+All response headers displayed as key-value pairs:
 
 - All response headers displayed as key-value pairs
 - Common headers highlighted for quick identification
 - Click to copy individual header values
 
 ### Status Code
-
-<!-- @screenshot: status-code.png - Show the status code indicator with color -->
 
 The HTTP status code is displayed with a color indicator:
 
@@ -58,8 +56,6 @@ The HTTP status code is displayed with a color indicator:
 - Useful for monitoring payload sizes
 
 ### Cookie Viewer
-
-<!-- @screenshot: cookie-viewer.png - Show the cookie viewer -->
 
 - View all cookies set by the response (`Set-Cookie` headers)
 - Display cookie properties: name, value, domain, path, expires, httpOnly, secure

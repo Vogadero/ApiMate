@@ -4,8 +4,6 @@ ApiMate supports multiple communication protocols beyond standard HTTP/HTTPS.
 
 ## HTTP/HTTPS
 
-<!-- @screenshot: http-request.png - Show an HTTP request being sent -->
-
 The primary protocol with full support for:
 
 - All HTTP methods (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS)
@@ -18,7 +16,7 @@ See [HTTP Request Editor](/features/http-request) for complete documentation.
 
 ## gRPC
 
-<!-- @screenshot: grpc-request.png - Show a gRPC request interface -->
+![gRPC request interface](/grpc-request.png)
 
 ApiMate supports gRPC, a high-performance RPC framework using Protocol Buffers.
 
@@ -53,7 +51,7 @@ ApiMate supports gRPC, a high-performance RPC framework using Protocol Buffers.
 
 ## WebSocket
 
-<!-- @screenshot: websocket-request.png - Show a WebSocket connection with message exchange -->
+![WebSocket connection with message exchange](/websocket.png)
 
 ApiMate provides a WebSocket client for testing real-time communication.
 
@@ -71,20 +69,6 @@ ApiMate provides a WebSocket client for testing real-time communication.
 - Click **Send** to transmit the message
 - Messages can be sent at any time while connected
 
-### Viewing Frames
-
-<!-- @screenshot: websocket-frames.png - Show the WebSocket frame viewer -->
-
-The frame viewer displays all WebSocket frames:
-
-| Column | Description |
-|--------|-------------|
-| Direction | Sent (outgoing) or Received (incoming) |
-| Type | Text or Binary |
-| Data | Frame content |
-| Timestamp | When the frame was sent/received |
-| Size | Frame size in bytes |
-
 ### Connection Management
 
 - **Connect**: Establish the WebSocket connection
@@ -94,7 +78,7 @@ The frame viewer displays all WebSocket frames:
 
 ## Server-Sent Events (SSE)
 
-<!-- @screenshot: sse-request.png - Show an SSE connection with event stream -->
+![SSE connection with event stream](/sse.png)
 
 ApiMate supports Server-Sent Events for testing one-way server push communication.
 
@@ -104,19 +88,6 @@ ApiMate supports Server-Sent Events for testing one-way server push communicatio
 2. Enter the SSE endpoint URL
 3. Add optional headers (e.g., <span v-pre>`Authorization: Bearer {{token}}`</span>)
 4. Click **Connect** to start receiving events
-
-### Viewing Events
-
-<!-- @screenshot: sse-events.png - Show the SSE event viewer -->
-
-The event viewer displays all received SSE events:
-
-| Column | Description |
-|--------|-------------|
-| Event | Event type (from `event:` field) |
-| Data | Event data (from `data:` field) |
-| ID | Event ID (from `id:` field) |
-| Timestamp | When the event was received |
 
 ### SSE Features
 

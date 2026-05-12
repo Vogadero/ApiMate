@@ -4,7 +4,7 @@ Collections allow you to organize, save, and run groups of related API requests.
 
 ## Collection Management
 
-<!-- @screenshot: collections.png - Show the collection tree with folders and requests -->
+![Collection tree with folders and requests](/collections.png)
 
 ### Creating Collections
 
@@ -31,8 +31,6 @@ Collections allow you to organize, save, and run groups of related API requests.
 
 ### Collection Tree Structure
 
-<!-- @screenshot: collection-tree.png - Show the hierarchical tree with indentation levels -->
-
 The sidebar displays collections in a hierarchical tree:
 
 ```
@@ -58,8 +56,6 @@ Collection Name
 - Can be imported by other ApiMate users
 
 ## Collection Runner
-
-<!-- @screenshot: collection-runner.png - Show the collection runner interface with results -->
 
 The Collection Runner allows you to execute all requests in a collection automatically.
 
@@ -97,8 +93,6 @@ guest,guest123,401
 Access iteration data in scripts via `pm.iterationData.get("key")`.
 
 ### Run Results
-
-<!-- @screenshot: runner-results.png - Show the run results with pass/fail indicators -->
 
 - Each request shows its result: **Pass** (green) or **Fail** (red)
 - Response status code and time displayed per request

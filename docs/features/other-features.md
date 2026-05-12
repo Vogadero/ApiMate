@@ -4,8 +4,6 @@ Additional features that enhance your API testing workflow within VS Code.
 
 ## CodeLens Integration
 
-<!-- @screenshot: codelens.png - Show CodeLens "Send Request" action above an API route in code -->
-
 ApiMate can detect API routes in your code and display a **Send Request** CodeLens action:
 
 - Detects routes in Express, Fastify, Koa, and other frameworks
@@ -34,8 +32,6 @@ app.get('/api/users', (req, res) => {
 ```
 
 ## Cookie Management
-
-<!-- @screenshot: cookie-manager.png - Show the cookie manager interface -->
 
 ApiMate provides a cookie manager for viewing and managing cookies:
 
@@ -80,8 +76,6 @@ To keep everything private:
 
 ## File Watcher
 
-<!-- @screenshot: file-watcher.png - Show the auto-reload notification -->
-
 ApiMate watches the storage directory for external changes:
 
 - When JSON files are modified externally (e.g., by another team member via Git pull), ApiMate automatically reloads the data
@@ -89,8 +83,6 @@ ApiMate watches the storage directory for external changes:
 - Use the **Refresh** button or Command Palette > ApiMate: Refresh Data for manual reload
 
 ## VS Code Theme Integration
-
-<!-- @screenshot: theme-integration.png - Show ApiMate in both light and dark themes -->
 
 ApiMate integrates with VS Code's theme system:
 

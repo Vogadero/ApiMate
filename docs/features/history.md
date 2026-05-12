@@ -4,8 +4,6 @@ ApiMate automatically saves your request history for quick access and re-executi
 
 ## Request History
 
-<!-- @screenshot: history-view.png - Show the history tab in the sidebar -->
-
 ### Auto-Save
 
 - Every request you send is automatically saved to history (when `apimate.autoSave` is enabled)
@@ -19,8 +17,6 @@ ApiMate automatically saves your request history for quick access and re-executi
 - Click the pin icon to pin/unpin a request
 
 ### Search and Filter
-
-<!-- @screenshot: history-search.png - Show the search/filter functionality -->
 
 - **Search**: Filter history by URL, method, or status code
 - **Method filter**: Show only specific HTTP methods (GET, POST, etc.)

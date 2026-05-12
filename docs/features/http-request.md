@@ -4,7 +4,7 @@ The HTTP Request Editor is the core of ApiMate, providing a comprehensive interf
 
 ## Request Methods & URL
 
-<!-- @screenshot: request-method-url.png - Show the method selector dropdown and URL input field -->
+![Request method selector and URL input](/request-method-url.png)
 
 ### Supported Methods
 
@@ -29,7 +29,7 @@ ApiMate supports all standard HTTP methods:
 
 ### Query Parameters Editor
 
-<!-- @screenshot: query-params.png - Show the query parameters key-value editor -->
+![Query parameters key-value editor](/query-params.png)
 
 - Key-value pair editor for query parameters
 - **Auto-add new row**: Start typing in the last row and a new empty row automatically appears
@@ -38,7 +38,7 @@ ApiMate supports all standard HTTP methods:
 
 ## Request Headers
 
-<!-- @screenshot: request-headers.png - Show the headers key-value editor with quick-insert -->
+![Request headers key-value editor with quick-insert](/request-headers.png)
 
 ### Header Editor
 
@@ -71,7 +71,7 @@ Variables are resolved at send time using the active environment.
 
 ## Request Body
 
-<!-- @screenshot: request-body.png - Show the body type selector and JSON editor -->
+![Body type selector and JSON editor](/request-body.png)
 
 ApiMate supports multiple body types, selectable via tabs:
 
@@ -115,7 +115,7 @@ ApiMate supports multiple body types, selectable via tabs:
 
 ## Authentication
 
-<!-- @screenshot: authentication.png - Show the auth type selector and auth configuration -->
+![Auth type selector and auth configuration](/authentication.png)
 
 ApiMate provides comprehensive authentication support. Select the auth type from the dropdown in the Auth tab.
 
@@ -185,7 +185,7 @@ Configuration options:
 
 ## Import cURL
 
-<!-- @screenshot: import-curl.png - Show the cURL import dialog -->
+![cURL import dialog](/import-curl.png)
 
 You can import a cURL command to create a request:
 
