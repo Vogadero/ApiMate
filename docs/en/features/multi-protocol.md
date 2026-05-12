@@ -12,7 +12,7 @@ The primary protocol with full support for:
 - Authentication mechanisms
 - Redirect following with configurable limits
 
-See [HTTP Request Editor](/features/http-request) for complete documentation.
+See [HTTP Request Editor](/en/features/http-request) for complete documentation.
 
 ## gRPC
 

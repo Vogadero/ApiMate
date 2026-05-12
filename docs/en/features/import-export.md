@@ -74,7 +74,7 @@ Import environment variables from `.env` files:
 2. Select a `.env` file
 3. Variables with sensitive names are automatically marked as secret
 
-See [Environment Variables > Import from .env](/features/environment-variables#import-from-env-files) for details.
+See [Environment Variables > Import from .env](/en/features/environment-variables#import-from-env-files) for details.
 
 ### JSON Environment Files
 

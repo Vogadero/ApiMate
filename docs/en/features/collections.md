@@ -106,4 +106,4 @@ Each request in a collection can have scripts that run before and after the requ
 - **Pre-request Script**: Modify the request before sending (set variables, modify headers, etc.)
 - **Post-response Script**: Process the response after receiving (extract data, run assertions, etc.)
 
-See [Scripts & Testing](/features/scripts-testing) for detailed scripting documentation.
+See [Scripts & Testing](/en/features/scripts-testing) for detailed scripting documentation.
